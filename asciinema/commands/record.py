@@ -43,7 +43,7 @@ class RecordCommand(Command):
 
         if os.path.exists(self.filename):
             if not os.access(self.filename, os.W_OK):
-                self.print_error("can't write to %s" % self.filename)
+                self.print_error(f"can't write to {self.filename}")
                 return 1
 
             if os.stat(self.filename).st_size > 0 and self.overwrite:
@@ -51,14 +51,14 @@ class RecordCommand(Command):
                 append = False
 
             elif os.stat(self.filename).st_size > 0 and not append:
-                self.print_error("%s already exists, aborting" % self.filename)
+                self.print_error(f"{self.filename} already exists, aborting")
                 self.print_error("use --append option if you want to append to existing recording")
                 return 1
 
         if append:
-            self.print_info("appending to asciicast at %s" % self.filename)
+            self.print_info(f"appending to asciicast at {self.filename}")
         else:
-            self.print_info("recording asciicast to %s" % self.filename)
+            self.print_info(f"recording asciicast to {self.filename}")
 
         if self.command:
             self.print_info("""exit opened program when you're done""")

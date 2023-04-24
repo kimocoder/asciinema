@@ -10,12 +10,12 @@ stdout = None
 
 def assert_printed(expected):
     success = expected in stdout.getvalue()
-    assert success, 'expected text "%s" not printed' % expected
+    assert success, f'expected text "{expected}" not printed'
 
 
 def assert_not_printed(expected):
     success = expected not in stdout.getvalue()
-    assert success, 'not expected text "%s" printed' % expected
+    assert success, f'not expected text "{expected}" printed'
 
 
 class Test:

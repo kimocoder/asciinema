@@ -31,7 +31,10 @@ class Config:
             self.__save_install_id(id)
 
             items = {name: dict(section) for (name, section) in self.config.items()}
-            if items == {'DEFAULT': {}, 'api': {'token': id}} or items == {'DEFAULT': {}, 'user': {'token': id}}:
+            if items in [
+                {'DEFAULT': {}, 'api': {'token': id}},
+                {'DEFAULT': {}, 'user': {'token': id}},
+            ]:
                 os.remove(self.config_file_path)
 
         if self.env.get('ASCIINEMA_API_TOKEN'):
@@ -70,9 +73,7 @@ class Config:
 
     @property
     def install_id(self):
-        id = self.env.get('ASCIINEMA_INSTALL_ID') or self.__read_install_id()
-
-        if id:
+        if id := self.env.get('ASCIINEMA_INSTALL_ID') or self.__read_install_id():
             return id
         else:
             raise ConfigError('no install ID found')

@@ -23,13 +23,13 @@ class Parser(html.parser.HTMLParser):
     def handle_starttag(self, tag, attrs_list):
         # look for <link rel="alternate" type="application/x-asciicast" href="https://...cast">
         if tag == 'link':
-            attrs = {}
-            for k, v in attrs_list:
-                attrs[k] = v
-
+            attrs = dict(attrs_list)
             if attrs.get('rel') == 'alternate':
                 type = attrs.get('type')
-                if type == 'application/asciicast+json' or type == 'application/x-asciicast':
+                if type in [
+                    'application/asciicast+json',
+                    'application/x-asciicast',
+                ]:
                     self.url = attrs.get('href')
 
 
@@ -38,9 +38,9 @@ def open_url(url):
         return sys.stdin
 
     if url.startswith("ipfs://"):
-        url = "https://ipfs.io/ipfs/%s" % url[7:]
+        url = f"https://ipfs.io/ipfs/{url[7:]}"
     elif url.startswith("dweb:/ipfs/"):
-        url = "https://ipfs.io/%s" % url[5:]
+        url = f"https://ipfs.io/{url[5:]}"
 
     if url.startswith("http:") or url.startswith("https:"):
         req = Request(url)
@@ -70,7 +70,7 @@ def open_url(url):
                 if new_url.startswith("/"):
                     new_url = urlunparse((base_url[0], base_url[1], new_url, '', '', ''))
                 else:
-                    path = os.path.dirname(base_url[2]) + '/' + new_url
+                    path = f'{os.path.dirname(base_url[2])}/{new_url}'
                     new_url = urlunparse((base_url[0], base_url[1], path, '', '', ''))
 
             return open_url(new_url)

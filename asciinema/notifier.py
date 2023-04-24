@@ -24,7 +24,11 @@ class AppleScriptNotifier(Notifier):
 
     def args(self, text):
         text = text.replace('"', '\\"')
-        return ['osascript', '-e', 'display notification "{}" with title "asciinema"'.format(text)]
+        return [
+            'osascript',
+            '-e',
+            f'display notification "{text}" with title "asciinema"',
+        ]
 
 
 class LibNotifyNotifier(Notifier):
@@ -73,11 +77,10 @@ def get_notifier(enabled=True, command=None):
     if enabled:
         if command:
             return CustomCommandNotifier(command)
-        else:
-            for c in [TerminalNotifier, AppleScriptNotifier, LibNotifyNotifier]:
-                n = c()
+        for c in [TerminalNotifier, AppleScriptNotifier, LibNotifyNotifier]:
+            n = c()
 
-                if n.is_available():
-                    return n
+            if n.is_available():
+                return n
 
     return NoopNotifier()

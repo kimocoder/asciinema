@@ -12,7 +12,7 @@ def create_config(content=None, env={}):
     dir = tempfile.mkdtemp()
 
     if content:
-        path = dir + '/config'
+        path = f'{dir}/config'
         with open(path, 'w') as f:
             f.write(content)
 

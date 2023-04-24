@@ -59,7 +59,9 @@ For help on a specific command run:
   \x1b[1masciinema <command> -h\x1b[0m""",
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
-    parser.add_argument('--version', action='version', version='asciinema %s' % __version__)
+    parser.add_argument(
+        '--version', action='version', version=f'asciinema {__version__}'
+    )
 
     subparsers = parser.add_subparsers()
 
@@ -70,7 +72,12 @@ For help on a specific command run:
     parser_rec.add_argument('--raw', help='save only raw stdout output', action='store_true', default=False)
     parser_rec.add_argument('--overwrite', help='overwrite the file if it already exists', action='store_true', default=False)
     parser_rec.add_argument('-c', '--command', help='command to record, defaults to $SHELL', default=cfg.record_command)
-    parser_rec.add_argument('-e', '--env', help='list of environment variables to capture, defaults to ' + config.DEFAULT_RECORD_ENV, default=cfg.record_env)
+    parser_rec.add_argument(
+        '-e',
+        '--env',
+        help=f'list of environment variables to capture, defaults to {config.DEFAULT_RECORD_ENV}',
+        default=cfg.record_env,
+    )
     parser_rec.add_argument('-t', '--title', help='title of the asciicast')
     parser_rec.add_argument('-i', '--idle-time-limit', help='limit recorded idle time to given number of seconds', type=positive_float, default=maybe_str(cfg.record_idle_time_limit))
     parser_rec.add_argument('-y', '--yes', help='answer "yes" to all prompts (e.g. upload confirmation)', action='store_true', default=cfg.record_yes)

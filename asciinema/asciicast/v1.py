@@ -24,8 +24,7 @@ class Asciicast:
     @property
     def v2_header(self):
         keys = ['width', 'height', 'duration', 'command', 'title', 'env']
-        header = {k: v for k, v in self.__attrs.items() if k in keys and v is not None}
-        return header
+        return {k: v for k, v in self.__attrs.items() if k in keys and v is not None}
 
     def __stdout_events(self):
         for time, data in self.__attrs['stdout']:

@@ -24,10 +24,10 @@ class Api:
         return urlparse(self.url).hostname
 
     def auth_url(self):
-        return "{}/connect/{}".format(self.url, self.install_id)
+        return f"{self.url}/connect/{self.install_id}"
 
     def upload_url(self):
-        return "{}/api/asciicasts".format(self.url)
+        return f"{self.url}/api/asciicasts"
 
     def upload_asciicast(self, path):
         with open(path, 'rb') as f:
@@ -42,10 +42,10 @@ class Api:
             except HTTPConnectionError as e:
                 raise APIError(str(e))
 
-        if status != 200 and status != 201:
+        if status not in [200, 201]:
             self._handle_error(status, body)
 
-        if (headers.get('content-type') or '')[0:16] == 'application/json':
+        if (headers.get('content-type') or '')[:16] == 'application/json':
             result = json.loads(body)
         else:
             result = {'url': body}
@@ -58,20 +58,16 @@ class Api:
     def _user_agent(self):
         os = re.sub('([^-]+)-(.*)', '\\1/\\2', platform.platform())
 
-        return 'asciinema/%s %s/%s %s' % (__version__,
-                                          platform.python_implementation(),
-                                          platform.python_version(),
-                                          os
-                                          )
+        return f'asciinema/{__version__} {platform.python_implementation()}/{platform.python_version()} {os}'
 
     def _handle_error(self, status, body):
         errors = {
-            400: "Invalid request: %s" % body,
+            400: f"Invalid request: {body}",
             401: "Invalid or revoked install ID",
             404: "API endpoint not found. This asciinema version may no longer be supported. Please upgrade to the latest version.",
             413: "Sorry, your asciicast is too big.",
-            422: "Invalid asciicast: %s" % body,
-            503: "The server is down for maintenance. Try again in a minute."
+            422: f"Invalid asciicast: {body}",
+            503: "The server is down for maintenance. Try again in a minute.",
         }
 
         error = errors.get(status)

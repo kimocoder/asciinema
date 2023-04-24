@@ -67,7 +67,7 @@ def get_duration(path):
 
 def build_header(width, height, metadata):
     header = {'version': 2, 'width': width, 'height': height}
-    header.update(metadata)
+    header |= metadata
 
     assert 'width' in header, 'width missing in metadata'
     assert 'height' in header, 'height missing in metadata'
@@ -75,7 +75,7 @@ def build_header(width, height, metadata):
     assert type(header['height']) == int
 
     if 'timestamp' in header:
-        assert type(header['timestamp']) == int or type(header['timestamp']) == float
+        assert type(header['timestamp']) in [int, float]
 
     return header
 

@@ -28,7 +28,7 @@ def record(path, command=None, append=False, idle_time_limit=None,
         'timestamp': int(time.time())
     }
 
-    full_metadata.update(metadata or {})
+    full_metadata |= (metadata or {})
 
     if idle_time_limit is not None:
         full_metadata['idle_time_limit'] = idle_time_limit
